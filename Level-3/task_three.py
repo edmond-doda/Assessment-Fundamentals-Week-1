@@ -11,17 +11,19 @@ ideas - for each new line in the string, split after the £. Then store as a dic
 def generate_invoice(receipt_string: str) -> str:
     """Collects names and vat prices for all items and displays the information in an invoice format showing total exc vat, total vat amount, and total inc vat"""
     receipt_split = appends_vat_adjusted_price(receipt_string)
-    vat_receipt = "'''\nVAT RECEIPT\n\n"
+    vat_receipt = "VAT RECEIPT\n"
     total_exc_vat = 0
     total_inc_vat = 0
-    for item in receipt_split:
-        name = item[0]
-        vat_inc_price = item[1]
-        vat_exc_price = item[2]
-        vat_receipt += f'{name}£{vat_exc_price:.2f}\n'
-        total_exc_vat += vat_exc_price
-        total_inc_vat += vat_inc_price
-    vat_receipt += f"\nTotal: £{total_exc_vat:.2f}\nVAT: £{total_inc_vat-total_exc_vat:.2f}\nTotal inc VAT: £{total_inc_vat:.2f}\n'''"
+    if 'Total: £0.00' not in receipt_string:
+        vat_receipt += '\n'
+        for item in receipt_split:
+            name = item[0]
+            vat_inc_price = item[1]
+            vat_exc_price = item[2]
+            vat_receipt += f'{name}£{vat_exc_price:.2f}\n'
+            total_exc_vat += vat_exc_price
+            total_inc_vat += vat_inc_price
+    vat_receipt += f"\nTotal: £{total_exc_vat:.2f}\nVAT: £{total_inc_vat-total_exc_vat:.2f}\nTotal inc VAT: £{total_inc_vat:.2f}"
     return vat_receipt  # return the invoice string
 
 
