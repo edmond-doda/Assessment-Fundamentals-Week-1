@@ -4,12 +4,14 @@ Note: Do not add ANY variables to the global scope. This WILL break the tests.
 We have a string in receipt format
 
 Want to extract the price in the receipt as separate elements that we can work with.
-ideas - for each new line in the string, split after the £. Then store as a dictionary {str : float}.
+ideas - for each new line in the string, split after the £. 
+Then append vat pricing onto that list and work from there.
 """
 
 
 def generate_invoice(receipt_string: str) -> str:
-    """Collects names and vat prices for all items and displays the information in an invoice format showing total exc vat, total vat amount, and total inc vat"""
+    """Collects names and vat prices for all items and displays the information in an invoice 
+    format showing total exc vat, total vat amount, and total inc vat"""
     receipt_split = appends_vat_adjusted_price(receipt_string)
     vat_receipt = "VAT RECEIPT\n"
     total_exc_vat = 0
@@ -23,7 +25,7 @@ def generate_invoice(receipt_string: str) -> str:
             vat_receipt += f'{name}£{vat_exc_price:.2f}\n'
             total_exc_vat += vat_exc_price
             total_inc_vat += vat_inc_price
-    vat_receipt += f"\nTotal: £{total_exc_vat:.2f}\nVAT: £{total_inc_vat-total_exc_vat:.2f}\nTotal inc VAT: £{total_inc_vat:.2f}"
+    vat_receipt += (f"\nTotal: £{total_exc_vat:.2f}\nVAT: £{total_inc_vat-total_exc_vat:.2f}\nTotal inc VAT: £{total_inc_vat:.2f}")
     return vat_receipt  # return the invoice string
 
 

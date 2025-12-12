@@ -8,18 +8,20 @@ basket = []
 
 
 def add_to_basket(item: dict) -> list:
+    """Adds an item dictionary to the list call basket"""
     basket.append(item)
     return basket
 
 
-def generate_receipt(basket: list) -> str:
-    if basket == []:
+def generate_receipt(full_basket: list) -> str:
+    """Outputs a formatted receipt which shows the name and price of each item in a basket, as well as a total"""
+    if full_basket == []:
         return "Basket is empty"
 
     receipt = ""
     total = 0
 
-    for item in basket:
+    for item in full_basket:
         name = item["name"]
         price = item["price"]
         if price == 0:
