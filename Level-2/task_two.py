@@ -13,12 +13,36 @@ basket = []
 
 
 def add_to_basket(item: dict) -> list:
-    pass
-
+    """Creates a new key for the dictionary - quantity - which updates if an item already in the basket is being added again."""
+    for item_in_current_basket in basket:
+        if ((item_in_current_basket['name'] == item['name'])
+                and (item_in_current_basket['price'] == item['price'])):
+            item_in_current_basket['quantity'] += 1
+            return basket
+    item['quantity'] = 1
+    basket.append(item)
+    return basket
 
 
 def generate_receipt(basket: list) -> str:
-    pass
+    if basket == []:
+        return "Basket is empty"
+
+    receipt = "'''\n"
+    total = 0
+
+    for item in basket:
+        name = item["name"]
+        quantity = item["quantity"]
+        price = item["price"] * quantity
+        if price == 0:
+            receipt += f"{name} x {quantity} - Free\n"
+        else:
+            receipt += f"{name} x {quantity} - £{price: .2f}\n"
+        total += price
+
+    receipt += f"Total: £{total:.2f}\n'''"
+    return receipt
 
 #####
 #
