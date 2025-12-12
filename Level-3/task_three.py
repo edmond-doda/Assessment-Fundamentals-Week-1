@@ -9,14 +9,14 @@ Then append vat pricing onto that list and work from there.
 """
 
 
-def generate_invoice(receipt_string: str) -> str:
+def generate_invoice(receipt: str) -> str:
     """Collects names and vat prices for all items and displays the information in an invoice 
     format showing total exc vat, total vat amount, and total inc vat"""
-    receipt_split = appends_vat_adjusted_price(receipt_string)
+    receipt_split = appends_vat_adjusted_price(receipt)
     vat_receipt = "VAT RECEIPT\n"
     total_exc_vat = 0
     total_inc_vat = 0
-    if 'Total: £0.00' not in receipt_string:
+    if 'Total: £0.00' not in receipt:
         vat_receipt += '\n'
         for item in receipt_split:
             name = item[0]
@@ -25,14 +25,15 @@ def generate_invoice(receipt_string: str) -> str:
             vat_receipt += f'{name}£{vat_exc_price:.2f}\n'
             total_exc_vat += vat_exc_price
             total_inc_vat += vat_inc_price
-    vat_receipt += (f"\nTotal: £{total_exc_vat:.2f}\nVAT: £{total_inc_vat-total_exc_vat:.2f}\nTotal inc VAT: £{total_inc_vat:.2f}")
+    vat_receipt += f"\nTotal: £{total_exc_vat:.2f}\nVAT: £{total_inc_vat-total_exc_vat:.2f}\n"
+    vat_receipt += f'Total inc VAT: £{total_inc_vat:.2f}'
     return vat_receipt  # return the invoice string
 
 
-def itemises_receipt(receipt_string: str) -> list:
+def itemises_receipt(receipt_original: str) -> list:
     """Splits each line into a list and adds that to a list. [[string, float],[string, float]...]"""
     receipt_split = []
-    for line in receipt_string.splitlines():
+    for line in receipt_original.splitlines():
         if 'Total: £' in line:
             continue
         elif '£' in line:
@@ -44,10 +45,10 @@ def itemises_receipt(receipt_string: str) -> list:
     return receipt_split
 
 
-def appends_vat_adjusted_price(receipt_string):
+def appends_vat_adjusted_price(receipt_itemised):
     """Appends a vat adjusted price to the end of the split receipt list"""
     vat_rate = 0.2
-    receipt_split = itemises_receipt(receipt_string)
+    receipt_split = itemises_receipt(receipt_itemised)
     for item in receipt_split:
         item.append(item[1]*(1-vat_rate))
     return receipt_split
